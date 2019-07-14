@@ -15,10 +15,10 @@ scriptencoding utf-8
 "
 " 0. Faites ce que vous voulez, j’en ai RIEN À BRANLER.
 
-if exists('g:loaded_homoglyphs') || &cp
+if exists('g:loaded_unicode_homoglyphs') || &cp
   finish
 endif
-let g:loaded_homoglyphs = 1
+let g:loaded_unicode_homoglyphs = 1
 
 let s:keepcpo         = &cpo
 set cpo&vim
