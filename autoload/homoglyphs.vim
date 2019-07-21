@@ -114,11 +114,11 @@ function! s:normalize(o,c) abort
   set gdefault&
 
   for n in normalizations
-    exe o . ',' . c . 'substitute/' . n[1] . '/' . n[0] . '/geI'
+    exe 'silent keeppatterns ' . o . ',' . c . 'substitute/' . n[1] . '/' . n[0] . '/geI'
   endfor
   " use different delimiter to substitute '/'
   let n = ['/',  '[\uFF0F\u1735\u2044\u2215\u29F8]']
-  exe o . ',' . c . 'substitute@' . n[1] . '@' . n[0] . '@geI'
+  exe 'silent keeppatterns ' . o . ',' . c . 'substitute@' . n[1] . '@' . n[0] . '@geI'
 
   let &gdefault = gdefault
 endfunction
