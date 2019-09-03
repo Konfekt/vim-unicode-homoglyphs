@@ -3,8 +3,8 @@
 ===========================================================================
 Intro ~
 
-Every once in a while one pastes a (markup) code or prose from the internet
-into Vim and is at loss why it does not compile or render as meant to; this
+Every once in a while one pastes some (markup) code or prose from the internet
+into Vim and is at loss why it does not compile or render as meant to. This
 plug-in offers a hint and a solution by providing
 
 - highlighting of Unicode Homoglyphs, characters (among them many white

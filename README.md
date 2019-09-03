@@ -1,5 +1,5 @@
-Every once in a while one pastes a (markup) code or prose from the internet into Vim and is at loss why it does not compile or render as meant to;
-this plug-in offers a hint and a solution by providing
+Every once in a while one pastes some (markup) code or prose from the internet into Vim and is at loss why it does not compile or render as meant to.
+This plug-in offers a hint and a solution by providing
 
 - highlighting of [Unicode Homoglyphs](https://www.irongeek.com/homoglyph-attack-generator.php), characters (among them many white spaces) that only appear like ASCII characters but are not, and
 - the normal mode mapping `cu` to toggle it,
