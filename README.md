@@ -6,7 +6,7 @@ This plug-in offers a hint and a solution by providing
 
 and
 
-- an operator mapping `gy` in normal mode, for example `gwip` operates on a paragraph,
+- an operator mapping `gy` in normal mode, for example `gyip` operates on a paragraph,
 - a mapping `gyy` (and `gygy`) in normal mode that operates on a single line,
 - a mapping `gy` that operates on the visual selection, and
 - a command `NormalizeHomoglyphs` that operates on given range (equal to the whole buffer if unspecified)
