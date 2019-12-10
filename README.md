@@ -31,7 +31,7 @@ turns it into
 
 # Configuration
 
-To disable highlighting of [Unicode Homoglyphs](https://www.irongeek.com/homoglyph-attack-generator.php) by default, add to your `vimrc` the line
+To disable highlighting of [Unicode homoglyphs](https://www.irongeek.com/homoglyph-attack-generator.php) by default, add to your `vimrc` the line
 
 ```vim
     let g:is_homoglyph_on = 0
@@ -49,6 +49,10 @@ To change mappings, for example, to use `zy` instead of `gy` and `zu` instead of
 to your `vimrc`.
 
 # Related
+
+The [vim-troll-stopper](https://github.com/vim-utils/vim-troll-stopper) plug-in highlights and replaces Unicode homoglyphs commonly used to play pranks on coders.
+It is similar to this plug-in, but apparently its description made it hard to be found for me;
+I stumbled upon it way down the road by coincidence.
 
 For more convenient version control of prose, see the Vim plug-in [vim-sentence-chopper](https://github.com/Konfekt/vim-sentence-chopper) that puts each sentence onto a single line.
 
