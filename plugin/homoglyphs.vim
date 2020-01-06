@@ -68,7 +68,7 @@ let g:normalizations = [
       \ ['H',  '\u0397\u041D\u12D8\u13BB\u157C\u2C8E'],
       \ ['I',  '\u0399\u0406\u2160'],
       \ ['J',  '\u0408\u13AB\u148D'],
-      \ ['K',  '\u039A\u13E6\u16D5\u2C94'],
+      \ ['K',  '\u039A\u13E6\u16D5\u212A\u2C94'],
       \ ['L',  '\u13DE\u14AA\u216C'],
       \ ['M',  '\u039C\u03FA\u041C\u13B7\u216F'],
       \ ['N',  '\u039D\u2C9A'],
@@ -128,6 +128,7 @@ function! HomoglyphsOn() abort
           \ highlight homoglyphfg cterm=underline ctermfg=DarkGreen ctermbg=NONE gui=undercurl guifg=DarkGreen guibg=NONE |
           \ highlight homoglyphbg ctermfg=NONE ctermbg=DarkGreen guifg=NONE guibg=DarkGreen
     " Highlight homoglyphic white spaces also by background color
+    exe 'autocmd Syntax * syntax case match'
     exe 'autocmd Syntax * syntax match homoglyphbg ' . "'[" . g:whitespace_homoglyphs . "]'" . ' containedin=ALL'
     exe 'autocmd Syntax * syntax match homoglyphfg ' . "'[" . g:homoglyphs . "]'" . ' containedin=ALL'
   augroup end
