@@ -29,10 +29,10 @@ set cpo&vim
 let g:whitespace_homoglyphs = '\x0b\x0c\u00a0\u1680\u180e\u1160\u2000-\u200a\u202F\u205F\u3000\u3164\ufeff'
 let g:normalizations = [
       \ [' ',  g:whitespace_homoglyphs],
-      \ ['\/', '\uFF0F\u1735\u2044\u2215\u29F8'],
-      \ ['\\', '\u2216\u29F5\u29F9\uFE68\uFF3C'],
-      \ ['\~', '\u02DC\u2053\u223C\uFF5E'],
-      \ ['\&', '\uFE60\uFF06'],
+      \ ['/', '\uFF0F\u1735\u2044\u2215\u29F8'],
+      \ ['\', '\u2216\u29F5\u29F9\uFE68\uFF3C'],
+      \ ['~', '\u02DC\u2053\u223C\uFF5E'],
+      \ ['&', '\uFE60\uFF06'],
       \ ['!',  '\u01C3\u2D51\uFE15\uFE57\uFF01'],
       \ ['"',  '\u2033\u05f4\uFF02\u201c\u201d'],
       \ ['#',  '\uFE5F\uFF03'],

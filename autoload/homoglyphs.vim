@@ -22,9 +22,8 @@ function! s:normalize(o,c) abort
 
   let gdefault = &gdefault
   set gdefault&
-
   for n in g:normalizations
-    exe 'silent keeppatterns ' . o . ',' . c . 'substitute/' . '[' . n[1] . ']' . '/' . n[0] . '/geI'
+    exe 'silent keeppatterns ' . o . ',' . c . 'substitute/' . '[' . n[1] . ']' . '/' . escape(n[0], '\/~&') . '/geI'
   endfor
 
   let &gdefault = gdefault
