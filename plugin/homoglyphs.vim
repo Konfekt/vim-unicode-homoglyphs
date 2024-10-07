@@ -110,7 +110,7 @@ let g:normalizations = [
       \ ['y',  '\u0443\u1EFF'],
       \ ['z',  '\u1D22'],
       \ ['{',  '\uFE5B\uFF5B'],
-      \ ['|',  '\u01C0\u16C1\u239C\u239F\u23A2\u23A5\u23AA\u23AE\uFF5C\uFFE8'],
+      \ ['|',  '\u01C0\u16C1\u239C\u239F\u23A2\u23A5\u23AA\u23AE\u2502\uFF5C\uFFE8'],
       \ ['}',  '\uFE5C\uFF5D'],
       \ ['Ä',  '\u04d2'],
       \ ['Ö',  '\u04e6'],
