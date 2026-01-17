@@ -48,6 +48,10 @@ To change mappings, for example, to use `zy` instead of `gy` and `zu` instead of
 
 to your `vimrc`.
 
+# Requirements
+
+Vim9 or higher.
+
 # Related
 
 The [vim-troll-stopper](https://github.com/vim-utils/vim-troll-stopper) plug-in highlights and replaces Unicode homoglyphs commonly used to play pranks on coders.
