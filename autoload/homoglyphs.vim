@@ -34,16 +34,16 @@ function! homoglyphs#normalize(...) abort
 
   " Map each homoglyph to its replacement; the first normalization listing a
   " character wins, as when they are applied one after the other.
-  let s:replacements = {}
+  let replacements = {}
   for [ascii, glyphs] in g:normalizations
     for nr in str2list(glyphs)
       let glyph = nr2char(nr)
-      if !has_key(s:replacements, glyph)
-        let s:replacements[glyph] = ascii
+      if !has_key(replacements, glyph)
+        let replacements[glyph] = ascii
       endif
     endfor
   endfor
-  let patterns = homoglyphs#patterns(join(keys(s:replacements), ''))
+  let patterns = homoglyphs#patterns(join(keys(replacements), ''))
 
   for lnum in range(first, last)
     let old = getline(lnum)
@@ -53,18 +53,12 @@ function! homoglyphs#normalize(...) abort
     endif
     let new = old
     for pattern in patterns
-      let new = substitute(new, pattern, '\=s:replacements[submatch(0)]', 'g')
+      let new = substitute(new, pattern, '\=replacements[submatch(0)]', 'g')
     endfor
     if new !=# old
       call setline(lnum, new)
     endif
   endfor
-endfunction
-
-" Normalize v:count1 lines from the cursor on, but at most up to the last one.
-function! homoglyphs#normalize_lines() abort
-  let first = line('.')
-  call homoglyphs#normalize(first, min([line('$'), first + v:count1 - 1]))
 endfunction
 
 function! homoglyphs#define_highlights() abort

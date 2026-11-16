@@ -7,7 +7,7 @@ This plug-in offers a hint and a solution by providing
 and
 
 - an operator mapping `gy` in normal mode, for example `gyip` operates on a paragraph,
-- a mapping `gyy` (and `gygy`) in normal mode that operates on the current line, or on [count] lines,
+- a mapping `gyy` (and `gygy`) in normal mode that operates on the current line, or on [count] lines (repeatable by `.`),
 - a mapping `gy` that operates on the visual selection, and
 - a command `NormalizeHomoglyphs` that operates on given range (equal to the whole buffer if unspecified)
 
