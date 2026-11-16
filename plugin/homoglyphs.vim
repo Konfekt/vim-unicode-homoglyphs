@@ -21,38 +21,23 @@ if exists('g:loaded_unicode_homoglyphs') || &compatible
 endif
 let g:loaded_unicode_homoglyphs = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
 " From https://fastapi.metacpan.org/source/BIGPRESH/Unicode-Homoglyph-Replace-0.01/lib/Unicode/Homoglyph/Replace.pm
 " Consider Unicode TR39 confusables for broader coverage:
 " https://www.unicode.org/reports/tr39/
 
-let s:LS   = nr2char(0x2028)
-let s:PS   = nr2char(0x2029)
-let s:SHY  = nr2char(0x00ad)
-let s:ZWS  = nr2char(0x200b)
-let s:ZWNJ = nr2char(0x200c)
-let s:ZWJ  = nr2char(0x200d)
-let s:WJ   = nr2char(0x2060)
-let s:IS   = nr2char(0x2063)
-let s:IP   = nr2char(0x2064)
-let s:BOM  = nr2char(0xfeff)
+" Characters are listed by code point, as most of them are invisible.
+let g:whitespace_homoglyphs = join(map(
+      \ [0x0b, 0x0c, 0xa0, 0x1680, 0x180e]
+      \ + range(0x2000, 0x200a)
+      \ + [0x2028, 0x2029, 0x202f, 0x205f, 0x3000, 0x3164],
+      \ 'nr2char(v:val)'), '')
 
-let g:whitespace_homoglyphs =
-      \ "\x0b\x0c"
-      \ . "  ᠎"
-      \ . " - "
-      \ . s:LS
-      \ . s:PS
-      \ . "  　ㅤ"
-
-let g:invisible_homoglyphs =
-      \ s:SHY
-      \ . s:ZWS
-      \ . s:ZWNJ
-      \ . s:ZWJ
-      \ . s:WJ
-      \ . s:IS
-      \ . s:IP
-      \ . s:BOM
+let g:invisible_homoglyphs = join(map(
+      \ [0xad, 0x200b, 0x200c, 0x200d, 0x2060, 0x2063, 0x2064, 0xfeff],
+      \ 'nr2char(v:val)'), '')
 
 let g:ws_and_invis_homoglyphs = g:whitespace_homoglyphs . g:invisible_homoglyphs
 
@@ -83,15 +68,14 @@ call extend(g:normalizations, [
 
 call extend(g:normalizations, [
       \ ['/',  '᜵⁄∕⧸／'],
-      \ ['\\', '∖⧵⧹﹨＼'],
+      \ ['\',   '∖⧵⧹﹨＼'],
       \ ['~',  '˜⁓∼～'],
       \ ['&',  '﹠＆'],
       \ ['!',  'ǃⵑ︕﹗！'],
-\ ['"',  '″״＂“„'],
+      \ ['"',  '”″״＂“„'],
       \ ['#',  '﹟＃'],
       \ ['$',  '﹩＄'],
       \ ['%',  '٪⁒﹪％'],
-      \ ['"',  '”″״＂“„'],
       \ ["'",  '´ʹˊʹ‘’′＇︲'],
       \ ['(',  '﹙（❨⟮⦅'],
       \ [')',  '﹚）❩⟯⦆'],
@@ -187,48 +171,15 @@ call extend(g:normalizations, [
       \ ['z', 'ᴢ'],
       \ ])
 
-let s:fullwidth_norms = []
-for codepoint in range(char2nr('!'), char2nr('~'))
-  let ascii = nr2char(codepoint)
-  let fw = nr2char(codepoint + 0xFEE0)
-  call add(s:fullwidth_norms, [ascii, fw])
-endfor
-call extend(g:normalizations, s:fullwidth_norms)
-unlet s:fullwidth_norms
-unlet codepoint
-unlet ascii
-unlet fw
+" Fullwidth forms U+FF01 to U+FF5E of the ASCII characters ! to ~
+call extend(g:normalizations,
+      \ map(range(0xff01, 0xff5e), '[nr2char(v:val - 0xfee0), nr2char(v:val)]'))
 
-let g:homoglyphs = ''
-for norm in g:normalizations
-  let g:homoglyphs .= norm[1]
-endfor
-unlet norm
+let g:homoglyphs = join(map(copy(g:normalizations), 'v:val[1]'), '')
 
-function! s:DefineHighlights() abort
-  highlight homoglyphfg cterm=underline ctermfg=DarkGreen ctermbg=NONE gui=undercurl guifg=DarkGreen guibg=NONE
-  highlight homoglyphbg ctermfg=NONE ctermbg=DarkGreen guifg=NONE guibg=DarkGreen
-endfunction
-
-function! s:DefineSyntax() abort
-  syntax case match
-
-  silent! syntax clear homoglyphbg
-  silent! syntax clear homoglyphfg
-
-  execute printf("syntax match homoglyphbg '[%s]' containedin=ALL", g:ws_and_invis_homoglyphs)
-  execute printf("syntax match homoglyphfg '[%s]' containedin=ALL", g:homoglyphs)
-endfunction
-
+" Kept for compatibility; prefer homoglyphs#on().
 function! HomoglyphsOn() abort
-  augroup HighlightHomoglyphs
-    autocmd!
-    autocmd ColorScheme * call s:DefineHighlights()
-    autocmd Syntax * call s:DefineSyntax()
-  augroup END
-
-  silent doautocmd HighlightHomoglyphs ColorScheme
-  silent doautocmd HighlightHomoglyphs Syntax
+  call homoglyphs#enable()
 endfunction
 
 if !exists('g:is_homoglyph_on')
@@ -236,13 +187,15 @@ if !exists('g:is_homoglyph_on')
 endif
 
 if g:is_homoglyph_on
-  call HomoglyphsOn()
+  call homoglyphs#enable()
 endif
 
 command! -range=% -bar NormalizeHomoglyphs call homoglyphs#normalize(<line1>, <line2>)
 
 nnoremap <silent> <Plug>(NormalizeHomoglyphs) :<C-U>set operatorfunc=homoglyphs#normalize<CR>g@
 xnoremap <silent> <Plug>(NormalizeHomoglyphs) :<C-U>call homoglyphs#normalize("'<", "'>")<CR>
+nnoremap <silent> <Plug>(NormalizeHomoglyphsLine) :<C-U>call homoglyphs#normalize_lines()<CR>
+nnoremap <silent> <Plug>(HighlightHomoglyphs) :<C-U>call homoglyphs#toggle()<CR>
 
 if !hasmapto('<Plug>(NormalizeHomoglyphs)', 'n')
   silent! nmap <unique> gy <Plug>(NormalizeHomoglyphs)
@@ -251,12 +204,15 @@ if !hasmapto('<Plug>(NormalizeHomoglyphs)', 'x')
   silent! xmap <unique> gy <Plug>(NormalizeHomoglyphs)
 endif
 
-if hasmapto('gy', 'n')
-  silent! nnoremap <unique><silent> gyy :<C-U>call homoglyphs#normalize(line('.'), line('.') + v:count1 - 1)<CR>
-  silent! nnoremap <unique><silent> gygy gyy
+if maparg('gy', 'n') ==# '<Plug>(NormalizeHomoglyphs)'
+      \ && !hasmapto('<Plug>(NormalizeHomoglyphsLine)', 'n')
+  silent! nmap <unique> gyy  <Plug>(NormalizeHomoglyphsLine)
+  silent! nmap <unique> gygy <Plug>(NormalizeHomoglyphsLine)
 endif
 
-silent! nnoremap <unique><silent> <Plug>(HighlightHomoglyphs) :<C-U>call homoglyphs#toggle()<CR>
 if !hasmapto('<Plug>(HighlightHomoglyphs)', 'n')
   silent! nmap <unique> cu <Plug>(HighlightHomoglyphs)
 endif
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
