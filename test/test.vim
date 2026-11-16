@@ -168,6 +168,11 @@ function! s:TestLineMappings() abort
   call cursor(2, 1)
   execute 'normal 5gyy'
   call s:Check('gyy: count past the last line', getline(1, 3), ['ａ', 'b', 'c'])
+  call s:Reset(['ａ', 'ｂ', 'ｃ', 'ｄ', 'ｅ'])
+  execute 'normal 2gyy'
+  call cursor(4, 1)
+  execute 'normal .'
+  call s:Check('gyy: dot repeat with count', getline(1, 5), ['a', 'b', 'ｃ', 'd', 'e'])
 endfunction
 
 function! s:TestHighlight() abort
@@ -196,9 +201,20 @@ function! s:TestToggle() abort
   call s:Check('toggle: cu mapped', maparg('cu', 'n'), '<Plug>(HighlightHomoglyphs)')
 endfunction
 
+" The legacy HomoglyphsOn() also records that highlighting is on, so that the
+" next toggle turns it off.
+function! s:TestHomoglyphsOn() abort
+  call homoglyphs#off()
+  call HomoglyphsOn()
+  call s:Check('HomoglyphsOn: state on', g:is_homoglyph_on, 1)
+  call homoglyphs#toggle()
+  call s:Check('HomoglyphsOn: toggle turns off', [g:is_homoglyph_on, exists('#HighlightHomoglyphs#Syntax')], [0, 0])
+  call homoglyphs#on()
+endfunction
+
 for s:t in ['NormalizeChars', 'ControlCharacters', 'UnchangedBuffer', 'Backslash', 'Composing', 'Range', 'Options',
       \ 'GdefaultRestoredOnError', 'CursorAndMarks', 'Undo', 'Operator',
-      \ 'Visual', 'LineMappings', 'Highlight', 'Toggle']
+      \ 'Visual', 'LineMappings', 'Highlight', 'Toggle', 'HomoglyphsOn']
   try
     call call('s:Test' . s:t, [])
   catch

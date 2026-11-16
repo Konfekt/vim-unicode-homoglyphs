@@ -180,6 +180,7 @@ let g:homoglyphs = join(map(copy(g:normalizations), 'v:val[1]'), '')
 " Kept for compatibility; prefer homoglyphs#on().
 function! HomoglyphsOn() abort
   call homoglyphs#enable()
+  let g:is_homoglyph_on = 1
 endfunction
 
 if !exists('g:is_homoglyph_on')
@@ -194,7 +195,9 @@ command! -range=% -bar NormalizeHomoglyphs call homoglyphs#normalize(<line1>, <l
 
 nnoremap <silent> <Plug>(NormalizeHomoglyphs) :<C-U>set operatorfunc=homoglyphs#normalize<CR>g@
 xnoremap <silent> <Plug>(NormalizeHomoglyphs) :<C-U>call homoglyphs#normalize("'<", "'>")<CR>
-nnoremap <silent> <Plug>(NormalizeHomoglyphsLine) :<C-U>call homoglyphs#normalize_lines()<CR>
+" [count] lines as an operator on them, so that . repeats it.
+nnoremap <silent><expr> <Plug>(NormalizeHomoglyphsLine)
+      \ ':<C-U>set operatorfunc=homoglyphs#normalize<CR>' . v:count1 . 'g@_'
 nnoremap <silent> <Plug>(HighlightHomoglyphs) :<C-U>call homoglyphs#toggle()<CR>
 
 if !hasmapto('<Plug>(NormalizeHomoglyphs)', 'n')
